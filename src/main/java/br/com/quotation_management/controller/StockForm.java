@@ -6,37 +6,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+//import javax.validation.constraints.NotEmpty;
+//import javax.validation.constraints.NotNull;
 
 import br.com.quotation_management.model.Stock;
 import br.com.quotation_management.model.StockQuote;
 
 public class StockForm {
 
-	@NotNull
-	@NotEmpty
+//	@NotNull
+//	@NotEmpty
 	private String stockId;
 	
-	@NotNull
-	@NotEmpty
+//	@NotNull
+//	@NotEmpty
 	private Map<String, String> quotes;
 
 	public String getStockId() {
 		return stockId;
 	}
 
-	public Map<String, String> getStockQuotes() {
+	public Map<String, String> getQuotes() {
 		return quotes;
 	}
 
 	public List<StockQuote> generateStockQuoteList(Stock stock) {
 		List<StockQuote> quotes = new ArrayList<>();
 		
-		for (Map.Entry<String, String> quoteEntry : this.quotes.entrySet()) {
+		for (Map.Entry<String, String> entry : this.quotes.entrySet()) {
 			StockQuote quote = new StockQuote();
-			quote.setDate(LocalDate.parse(quoteEntry.getKey()));
-			quote.setValue(new BigDecimal(quoteEntry.getValue()));
+			quote.setDate(LocalDate.parse(entry.getKey()));
+			quote.setValue(new BigDecimal(entry.getValue()));
 			quote.setStock(stock);
 			
 			quotes.add(quote);

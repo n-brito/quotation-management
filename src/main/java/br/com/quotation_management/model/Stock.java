@@ -5,19 +5,22 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-;
 
+@Entity
 public class Stock {
 
 	@Id
 	private String id;
 	private String stockId;
 	
+	//mappedBy: the quotes will be mapped by their corresponding stock
 	@OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
 	private List<StockQuote> quotes = new ArrayList<>();
 	
+	//assigning an id in the required pattern
 	public Stock() {
 		this.id = UUID.randomUUID().toString();
 	}
@@ -38,11 +41,11 @@ public class Stock {
 		this.stockId = stockId;
 	}
 
-	public List<StockQuote> getStockQuotes() {
+	public List<StockQuote> getQuotes() {
 		return quotes;
 	}
 
-	public void setStockQuotes(List<StockQuote> quotes) {
+	public void setQuotes(List<StockQuote> quotes) {
 		this.quotes = quotes;
 	}
 	
