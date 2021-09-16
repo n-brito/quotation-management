@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,8 @@ import br.com.quotation_management.model.Stock;
 import br.com.quotation_management.model.StockQuote;
 import br.com.quotation_management.repository.StockQuoteRepository;
 import br.com.quotation_management.repository.StockRepository;
+import br.com.quotation_management.service.StockRegister;
+import br.com.quotation_management.service.StockService;
 
 @RestController
 @RequestMapping("/quote")
@@ -29,10 +32,19 @@ public class StockQuoteController {
 	private StockRepository stockRepository;
 	@Autowired
 	private StockQuoteRepository stockQuoteRepository;
+	@Autowired
+	private StockService stockService;
 	
 	@PostMapping
 	@Transactional
 	public ResponseEntity<?> createStockQuote(@RequestBody StockForm form, UriComponentsBuilder uriBuilder) {
+		
+		List<StockRegister> stockList = stockService.listStocks();
+		List<String> stockIdList = stockList.stream().map(StockRegister::getId).collect(Collectors.toList());
+		
+		if (!stockIdList.contains(form.getStockId())) {
+			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Operation not allowed: no stock registered with the id " + form.getStockId());
+		}
 					
 		Stock stock = stockRepository.findByStockId(form.getStockId());
 		
@@ -60,6 +72,8 @@ public class StockQuoteController {
 	
 	@GetMapping()
 	public ResponseEntity<?> listAll() {
+//		List<StockRegister> stockList = stockService.listStocks();
+		
 		return ResponseEntity.ok(stockRepository.findAll().stream().map(StockDto::new).collect(Collectors.toList()));
 	}
 	

@@ -15,9 +15,8 @@ public class StockDto {
 	
 	public StockDto(Stock stock) {
 		this.id = stock.getId();
-		this.stockId = stock.getStockId();
-		
-		for (StockQuote quote : stock.getStockQuotes()) {
+		this.stockId = stock.getStockId();		
+		for (StockQuote quote : stock.getQuotes()) {
 			this.quotes.put(quote.getDate().toString(), quote.getValue().toString());
 		}
 	}
@@ -33,5 +32,7 @@ public class StockDto {
 	public Map<String, String> getQuotes() {
 		return quotes;
 	}
+	
+	
 
 }
