@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: naiara.rodrigues
+Build-Jdk: 16.0.2
+Implementation-Title: quotation-management
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: br.com.inatel
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-boot
+ -starter-parent/quotation-management
+Created-By: Maven Integration for Eclipse
+
