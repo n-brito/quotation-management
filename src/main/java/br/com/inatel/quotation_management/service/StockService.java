@@ -32,7 +32,7 @@ public class StockService {
 	public void registerApplicationInStockManager() {
 		JSONObject body = new JSONObject();
 		body.put("host", "localhost");
-		body.put("port", 8082);
+		body.put("port", 8081);
 		
 		HttpHeaders header = new HttpHeaders();
 		header.setContentType(MediaType.APPLICATION_JSON);

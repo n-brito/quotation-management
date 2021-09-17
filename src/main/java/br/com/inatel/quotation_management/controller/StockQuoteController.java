@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.inatel.quotation_management.model.Stock;
-import br.com.inatel.quotation_management.model.StockQuote;
 import br.com.inatel.quotation_management.repository.StockQuoteRepository;
 import br.com.inatel.quotation_management.repository.StockRepository;
 import br.com.inatel.quotation_management.service.StockRegister;
@@ -35,6 +34,7 @@ public class StockQuoteController {
 	@Autowired
 	private StockService stockService;
 	
+	//adds a new quotation to the database
 	@PostMapping
 	@Transactional
 	public ResponseEntity<?> createStockQuote(@RequestBody StockForm form, UriComponentsBuilder uriBuilder) {
@@ -42,44 +42,40 @@ public class StockQuoteController {
 		List<StockRegister> stockList = stockService.listStocks();
 		List<String> stockIdList = stockList.stream().map(StockRegister::getId).collect(Collectors.toList());
 		
+		//allows quote addition to proceed only if stockId passed exists on stock-manager application
 		if (!stockIdList.contains(form.getStockId())) {
-			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Operation not allowed: no stock registered with the id " + form.getStockId());
+			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Operation not allowed: No stock registered under the stockId " + form.getStockId());
 		}
-					
-		Stock stock = stockRepository.findByStockId(form.getStockId());
+							
+		Stock stock = new Stock(form.getStockId());
 		
-		if (stock == null) {
-			stock = new Stock();
-			stock.setStockId(form.getStockId());
+		stock.setQuotes(form.generateStockQuoteList(stock));
 			
-			List<StockQuote> quotes = form.generateStockQuoteList(stock);
-			stock.setQuotes(quotes);
-			
-			stock = stockRepository.save(stock);
-									
-		} else {
-			List<StockQuote> quotesList = stock.getQuotes();
-			List<StockQuote> newQuotesList = form.generateStockQuoteList(stock);
-			
-			quotesList.addAll(newQuotesList);
-			stock.setQuotes(quotesList);
-		}
+		stockRepository.save(stock);
 		
 		URI uri = uriBuilder.path("/stocks/{id}").buildAndExpand(form.getStockId()).toUri();
 
 		return ResponseEntity.created(uri).body(new StockDto(stock));		
 	}
 	
+	//lists all quotes in the database
 	@GetMapping()
 	public ResponseEntity<?> listAll() {
-//		List<StockRegister> stockList = stockService.listStocks();
-		
-		return ResponseEntity.ok(stockRepository.findAll().stream().map(StockDto::new).collect(Collectors.toList()));
+		List<Stock> stockList = stockRepository.findAll();
+		if (stockList.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No stocks registered");
+		}
+		return ResponseEntity.ok(stockList.stream().map(StockDto::new).collect(Collectors.toList()));
 	}
 	
+	//lists all quotes in the database related to the referred stockId
 	@GetMapping("/{stockId}")
 	public ResponseEntity<?> getByStockId(@PathVariable("stockId") String stockId) {
-		return ResponseEntity.ok(new StockDto(stockRepository.findByStockId(stockId)));
+		List<Stock> stockListByStockId = stockRepository.findByStockId(stockId);
+		if (stockListByStockId.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No stock registered under the stockId " + stockId);
+		}
+		return ResponseEntity.ok(stockListByStockId.stream().map(StockDto::new).collect(Collectors.toList()));
 	}
 	
 

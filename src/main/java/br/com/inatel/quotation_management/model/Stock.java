@@ -24,7 +24,12 @@ public class Stock {
 	public Stock() {
 		this.id = UUID.randomUUID().toString();
 	}
-
+	
+	public Stock(String stockId) {
+		this.id = UUID.randomUUID().toString();
+		this.stockId = stockId;
+	}
+	
 	public String getId() {
 		return id;
 	}

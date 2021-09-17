@@ -8,6 +8,6 @@ import br.com.inatel.quotation_management.model.Stock;
 
 public interface StockRepository extends JpaRepository<Stock, String>{
 	
-	Stock findByStockId(String stockId);
+	List<Stock> findByStockId(String stockId);
 
 }
