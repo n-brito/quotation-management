@@ -1,0 +1,3 @@
+br\com\inatel\quotation_management\QuotationmanagementApplicationTests.class
+br\com\inatel\quotation_management\controller\StockDtoTest.class
+br\com\inatel\quotation_management\controller\StockQuoteControllerTest.class

@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.event.EventListener;
@@ -17,8 +19,12 @@ import org.springframework.web.client.RestTemplate;
 public class StockService {
 
 	private RestTemplate restTemplate = new RestTemplate();
+	private String stockManagerURL;
 	
-	private String stockManagerURL = "http://localhost:8080";
+	@Autowired
+	public StockService(@Value("${stock-manager.url}") String stockManagerURL) {
+		this.stockManagerURL = stockManagerURL;
+	}
 	
 	@Cacheable(value = "stockCache")
 	public List<StockRegister> listStocks() {
@@ -39,6 +45,7 @@ public class StockService {
 		
 		HttpEntity<String> request = new HttpEntity<String>(body.toString(), header);
 		restTemplate.postForObject(stockManagerURL + "/notification", request, String.class);
+		System.out.println("Quotation Management Application registered");
 	}
 	
 }

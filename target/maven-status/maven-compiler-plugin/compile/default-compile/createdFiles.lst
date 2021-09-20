@@ -1,0 +1,12 @@
+br\com\inatel\quotation_management\service\StockRegister.class
+br\com\inatel\quotation_management\validation\ErrorForm.class
+br\com\inatel\quotation_management\model\StockQuote.class
+br\com\inatel\quotation_management\repository\StockQuoteRepository.class
+br\com\inatel\quotation_management\service\StockService.class
+br\com\inatel\quotation_management\repository\StockRepository.class
+br\com\inatel\quotation_management\controller\StockQuoteController.class
+br\com\inatel\quotation_management\controller\StockForm.class
+br\com\inatel\quotation_management\controller\StockDto.class
+br\com\inatel\quotation_management\model\Stock.class
+br\com\inatel\quotation_management\QuotationManagementApplication.class
+br\com\inatel\quotation_management\controller\StockCacheController.class
